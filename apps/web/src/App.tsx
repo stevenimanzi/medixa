@@ -7,6 +7,7 @@ import DashboardLayout from './components/layout/DashboardLayout';
 import DashboardPage from './features/dashboard/DashboardPage';
 import POSPage from './features/pos/POSPage';
 import PharmacyPage from './features/pharmacy/PharmacyPage';
+import BranchesPage from './features/branches/BranchesPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/pos" element={<POSPage />} />
               <Route path="/pharmacy" element={<PharmacyPage />} />
+              <Route path="/branches" element={<BranchesPage />} />
               {/* Future routes will go here: /products, /orders, etc. */}
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Route>
