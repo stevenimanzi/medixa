@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Search, Plus, Minus, Trash2, ShoppingCart, User, CreditCard } from 'lucide-react';
+import { Search, Plus, Minus, Trash2, ShoppingCart, User, CreditCard, Printer, Download, Save, X, CheckCircle2 } from 'lucide-react';
 import api from '../../lib/api';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 
 // Types
 interface Product {
   id: number;
   name: string;
   sku: string | null;
-  price: string; // comes as string from decimal
+  price: string;
   stock_quantity: number;
 }
 
@@ -21,6 +23,11 @@ export default function POSPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('Cash');
+  
+  // Invoice Modal State
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [savedSale, setSavedSale] = useState<any>(null);
+  const invoiceRef = useRef<HTMLDivElement>(null);
 
   // Fetch Products
   const { data: products, isLoading: loadingProducts, refetch: refetchProducts } = useQuery({
@@ -46,11 +53,9 @@ export default function POSPage() {
       const res = await api.post('/pos/checkout', payload);
       return res.data;
     },
-    onSuccess: () => {
-      alert('Sale completed successfully!');
-      setCart([]);
-      setSelectedCustomerId(null);
-      refetchProducts(); // update stock numbers
+    onSuccess: (data) => {
+      setSavedSale(data.sale);
+      refetchProducts();
     },
     onError: (error) => {
       alert('Checkout failed. Please try again.');
@@ -63,7 +68,7 @@ export default function POSPage() {
     setCart((prev) => {
       const existing = prev.find(item => item.id === product.id);
       if (existing) {
-        if (existing.cartQuantity >= product.stock_quantity) return prev; // check stock
+        if (existing.cartQuantity >= product.stock_quantity) return prev;
         return prev.map(item => item.id === product.id ? { ...item, cartQuantity: item.cartQuantity + 1 } : item);
       }
       return [...prev, { ...product, cartQuantity: 1 }];
@@ -88,12 +93,17 @@ export default function POSPage() {
   const filteredProducts = products?.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.sku?.toLowerCase().includes(searchQuery.toLowerCase())) || [];
 
   const subtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.cartQuantity), 0);
-  const tax = 0; // Assuming tax is inclusive or 0 for now
+  const tax = 0;
   const total = subtotal + tax;
 
-  const handleCheckout = () => {
+  const handleOpenInvoice = () => {
     if (cart.length === 0) return;
-    
+    setShowInvoiceModal(true);
+    setSavedSale(null); // Reset previous sale status
+  };
+
+  const handleSaveSale = () => {
+    if (cart.length === 0 || savedSale) return;
     const payload = {
       items: cart.map(item => ({
         product_id: item.id,
@@ -103,8 +113,70 @@ export default function POSPage() {
       payment_method: paymentMethod,
       customer_id: selectedCustomerId
     };
-
     checkoutMutation.mutate(payload);
+  };
+
+  const handlePrint = () => {
+    const content = invoiceRef.current;
+    if (!content) return;
+    
+    const printWindow = window.open('', '', 'width=800,height=800');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Invoice</title>
+            <style>
+              body { font-family: sans-serif; padding: 20px; color: #000; }
+              .invoice-box { max-width: 800px; margin: auto; }
+              table { w-full; width: 100%; text-align: left; border-collapse: collapse; margin-top: 20px; }
+              th, td { padding: 10px; border-bottom: 1px solid #eee; }
+              .text-right { text-align: right; }
+              .text-center { text-align: center; }
+              .header { text-align: center; margin-bottom: 30px; }
+              .header h1 { margin: 0; font-size: 24px; }
+              .header p { margin: 5px 0; color: #555; }
+              .totals { margin-top: 20px; text-align: right; }
+              .totals div { margin-bottom: 5px; }
+              .totals strong { font-size: 18px; }
+            </style>
+          </head>
+          <body>
+            <div class="invoice-box">
+              ${content.innerHTML}
+            </div>
+            <script>
+              window.onload = function() { window.print(); window.close(); }
+            </script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
+
+  const handleDownload = () => {
+    const element = invoiceRef.current;
+    if (!element) return;
+    
+    const opt = {
+      margin:       0.5,
+      filename:     `Invoice_${savedSale?.receipt_no || 'DRAFT'}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opt).from(element).save();
+  };
+
+  const handleCloseModal = () => {
+    setShowInvoiceModal(false);
+    if (savedSale) {
+      setCart([]);
+      setSelectedCustomerId(null);
+      setSavedSale(null);
+    }
   };
 
   return (
@@ -201,7 +273,6 @@ export default function POSPage() {
         </div>
 
         <div className="border-t border-slate-200 bg-white p-6 space-y-5">
-          {/* Settings */}
           <div className="grid grid-cols-2 gap-4">
             <div>
                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1"><User size={12}/> Customer</label>
@@ -230,7 +301,6 @@ export default function POSPage() {
             </div>
           </div>
 
-          {/* Totals */}
           <div className="space-y-2 pt-2 border-t border-slate-100">
             <div className="flex justify-between text-slate-500 text-sm">
               <span>Subtotal</span>
@@ -246,20 +316,131 @@ export default function POSPage() {
             </div>
           </div>
 
-          {/* Action */}
           <button 
-            onClick={handleCheckout}
-            disabled={cart.length === 0 || checkoutMutation.isPending}
+            onClick={handleOpenInvoice}
+            disabled={cart.length === 0}
             className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:shadow-blue-700/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {checkoutMutation.isPending ? (
-               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            ) : (
-               <>Process Payment</>
-            )}
+            Record Sales
           </button>
         </div>
       </div>
+
+      {/* Invoice Modal Overlay */}
+      {showInvoiceModal && (
+        <div className="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
+            
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-800">Invoice Preview</h2>
+              <button onClick={handleCloseModal} className="text-slate-400 hover:text-slate-600 p-2 bg-white rounded-full shadow-sm">
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-8 overflow-y-auto flex-1 bg-slate-100/50">
+              {/* Invoice Printable Area */}
+              <div ref={invoiceRef} className="bg-white p-10 shadow-sm border border-slate-200 rounded-xl">
+                <div className="text-center mb-8 header">
+                  <h1 className="text-2xl font-bold text-slate-900 tracking-tight">MEDIXA PHARMACY</h1>
+                  <p className="text-sm text-slate-500 mt-1">TIN: 102938475</p>
+                  <p className="text-sm text-slate-500">Location: Kigali, Rwanda</p>
+                  <p className="text-sm text-slate-500">Tel: +250 788 123 456</p>
+                </div>
+
+                <div className="flex justify-between items-end mb-6 pb-6 border-b border-slate-100">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-700">Bill To:</p>
+                    <p className="text-sm text-slate-600">{selectedCustomerId ? customers?.find((c:any) => c.id === selectedCustomerId)?.name : 'Walk-in Customer'}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-slate-500">Date: {new Date().toLocaleDateString()}</p>
+                    <p className="text-sm font-semibold text-slate-700 mt-1">
+                      Receipt No: {savedSale ? savedSale.receipt_no : <span className="text-orange-500 bg-orange-50 px-2 py-0.5 rounded">DRAFT</span>}
+                    </p>
+                  </div>
+                </div>
+
+                <table className="w-full text-left border-collapse text-sm mb-6">
+                  <thead>
+                    <tr className="border-b border-slate-200 text-slate-500">
+                      <th className="py-3 font-semibold w-1/2">Item Description</th>
+                      <th className="py-3 font-semibold text-center w-16">Qty</th>
+                      <th className="py-3 font-semibold text-right w-1/4">Price</th>
+                      <th className="py-3 font-semibold text-right w-1/4">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cart.map((item, i) => (
+                      <tr key={i} className="border-b border-slate-100">
+                        <td className="py-3 text-slate-800">{item.name}</td>
+                        <td className="py-3 text-center text-slate-600">{item.cartQuantity}</td>
+                        <td className="py-3 text-right text-slate-600">{parseFloat(item.price).toLocaleString()}</td>
+                        <td className="py-3 text-right text-slate-800 font-medium">{(parseFloat(item.price) * item.cartQuantity).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div className="flex justify-end totals">
+                  <div className="w-64 space-y-2">
+                    <div className="flex justify-between text-sm text-slate-500">
+                      <span>Subtotal:</span>
+                      <span>RWF {subtotal.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-slate-500">
+                      <span>Tax (0%):</span>
+                      <span>RWF 0</span>
+                    </div>
+                    <div className="flex justify-between text-lg font-bold text-slate-900 border-t border-slate-200 pt-2 mt-2">
+                      <span>Total:</span>
+                      <span>RWF {total.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-12 text-center border-t border-slate-100 pt-6">
+                  <p className="text-sm text-slate-500 italic">Thank you for your business!</p>
+                  <p className="text-xs text-slate-400 mt-1">Powered by Medixa Systems</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 bg-white border-t border-slate-100 flex flex-wrap gap-4 items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={handlePrint}
+                  className="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+                >
+                  <Printer size={18} /> Print
+                </button>
+                <button 
+                  onClick={handleDownload}
+                  className="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+                >
+                  <Download size={18} /> Download PDF
+                </button>
+              </div>
+
+              {savedSale ? (
+                <div className="flex items-center gap-2 text-green-600 font-semibold px-4 py-2 bg-green-50 rounded-xl">
+                  <CheckCircle2 size={20} /> Sale Recorded Successfully
+                </div>
+              ) : (
+                <button 
+                  onClick={handleSaveSale}
+                  disabled={checkoutMutation.isPending}
+                  className="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {checkoutMutation.isPending ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> : <Save size={20} />}
+                  Confirm & Save Sale
+                </button>
+              )}
+            </div>
+            
+          </div>
+        </div>
+      )}
     </div>
   );
 }
