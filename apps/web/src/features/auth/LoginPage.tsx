@@ -37,14 +37,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-slate-50 overflow-hidden font-sans">
-      {/* Subtle Grid Background */}
-      <div 
-        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(to right, #e2e8f0 1px, transparent 1px), linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }}
-      ></div>
+
 
       <div className="z-10 w-full max-w-[400px] p-8 bg-white rounded-3xl shadow-sm border border-slate-100">
         
