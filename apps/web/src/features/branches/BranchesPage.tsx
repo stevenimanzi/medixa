@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { MapPin, Plus, Edit2, Trash2, X } from 'lucide-react';
+import { MapPin, Plus, Edit2, Trash2, X, Phone, Building2 } from 'lucide-react';
 import api from '../../lib/api';
+import ConfirmModal from '../../components/ui/ConfirmModal';
 
 interface Branch {
   id: number;
@@ -91,9 +92,19 @@ export default function BranchesPage() {
     }
   };
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [branchToDelete, setBranchToDelete] = useState<number | null>(null);
+
   const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this branch?')) {
-      deleteMutation.mutate(id);
+    setBranchToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (branchToDelete) {
+      deleteMutation.mutate(branchToDelete);
+      setIsConfirmModalOpen(false);
+      setBranchToDelete(null);
     }
   };
 
@@ -106,7 +117,16 @@ export default function BranchesPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
+      <ConfirmModal 
+        isOpen={isConfirmModalOpen}
+        title="Delete Branch"
+        message="Are you sure you want to delete this branch? All data associated with it may be lost."
+        confirmText="Delete Branch"
+        onConfirm={confirmDelete}
+        onCancel={() => setIsConfirmModalOpen(false)}
+        isDestructive={true}
+      />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreditCard, Plus, Edit2, Trash2, X, Calendar, DollarSign, FileText } from 'lucide-react';
 import api from '../../lib/api';
+import ConfirmModal from '../../components/ui/ConfirmModal';
 
 interface Expense {
   id: number;
@@ -94,9 +95,19 @@ export default function ExpensesPage() {
     }
   };
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
+
   const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this expense?')) {
-      deleteMutation.mutate(id);
+    setExpenseToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (expenseToDelete) {
+      deleteMutation.mutate(expenseToDelete);
+      setIsConfirmModalOpen(false);
+      setExpenseToDelete(null);
     }
   };
 
@@ -113,6 +124,16 @@ export default function ExpensesPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
+      
+      <ConfirmModal 
+        isOpen={isConfirmModalOpen}
+        title="Delete Expense"
+        message="Are you sure you want to delete this expense record? This action cannot be undone."
+        confirmText="Delete Expense"
+        onConfirm={confirmDelete}
+        onCancel={() => setIsConfirmModalOpen(false)}
+        isDestructive={true}
+      />
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">

@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Users, Plus, Edit2, Trash2, X, ShieldAlert, ShieldCheck } from 'lucide-react';
 import api from '../../lib/api';
 import { useAuthStore } from '../auth/store';
+import ConfirmModal from '../../components/ui/ConfirmModal';
 
 interface User {
   id: number;
@@ -114,9 +115,19 @@ export default function UsersPage() {
     }
   };
 
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
+
   const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to remove this staff member?')) {
-      deleteMutation.mutate(id);
+    setUserToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (userToDelete) {
+      deleteMutation.mutate(userToDelete);
+      setIsConfirmModalOpen(false);
+      setUserToDelete(null);
     }
   };
 
@@ -130,6 +141,16 @@ export default function UsersPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
+      
+      <ConfirmModal 
+        isOpen={isConfirmModalOpen}
+        title="Remove Staff Member"
+        message="Are you sure you want to remove this staff member? This action cannot be undone and they will lose access immediately."
+        confirmText="Remove Staff"
+        onConfirm={confirmDelete}
+        onCancel={() => setIsConfirmModalOpen(false)}
+        isDestructive={true}
+      />
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <div>
