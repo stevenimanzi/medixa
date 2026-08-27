@@ -12,6 +12,7 @@ import ProductsPage from './features/products/ProductsPage';
 import UsersPage from './features/users/UsersPage';
 import ExpensesPage from './features/expenses/ExpensesPage';
 import ReportsPage from './features/reports/ReportsPage';
+import SettingsPage from './features/settings/SettingsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,7 @@ function App() {
               <Route path="/users" element={<UsersPage />} />
               <Route path="/expenses" element={<ExpensesPage />} />
               <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
               {/* Future routes will go here: /orders, etc. */}
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Route>
