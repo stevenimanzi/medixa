@@ -1,0 +1,11 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+        - routes/
+        - database/
+
+    # Level 5 is a good starting point for Laravel
+    level: 5
