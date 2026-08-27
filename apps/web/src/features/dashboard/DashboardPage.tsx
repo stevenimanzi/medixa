@@ -13,7 +13,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Products', value: '1,248', trend: '+4.2%' },
-          { label: 'Total Revenue', value: '$84,320', trend: '+12.5%' },
+          { label: 'Total Revenue', value: 'RWF 8,432,000', trend: '+12.5%' },
           { label: 'Total Orders', value: '142', trend: '-1.4%' },
           { label: 'Customers', value: '3,240', trend: '+2.1%' },
         ].map((stat, idx) => (

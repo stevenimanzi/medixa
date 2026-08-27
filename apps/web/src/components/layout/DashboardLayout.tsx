@@ -5,28 +5,30 @@ import {
   ShoppingCart, 
   Package, 
   Users, 
-  FileText, 
   BarChart2, 
-  Megaphone, 
-  Tag, 
   Settings, 
   LogOut,
   Bell,
   Search,
-  Building2
+  Building2,
+  Store,
+  MapPin,
+  CreditCard,
+  MonitorPlay
 } from 'lucide-react';
 import { useAuthStore } from '../../features/auth/store';
 import api from '../../lib/api';
 
 const mainNavigation = [
-  { name: 'Home', href: '/dashboard', icon: Home },
-  { name: 'Orders', href: '/orders', icon: ShoppingCart },
-  { name: 'Products', href: '/products', icon: Package },
-  { name: 'Customers', href: '/customers', icon: Users },
-  { name: 'Content', href: '/content', icon: FileText },
-  { name: 'Finances', href: '/finances', icon: BarChart2 },
-  { name: 'Marketing', href: '/marketing', icon: Megaphone },
-  { name: 'Discounts', href: '/discounts', icon: Tag },
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'POS (Point of Sale)', href: '/pos', icon: MonitorPlay },
+  { name: 'Pharmacy Details', href: '/pharmacy', icon: Store },
+  { name: 'Branches', href: '/branches', icon: MapPin },
+  { name: 'Products & Stock', href: '/products', icon: Package },
+  { name: 'Orders & Sales', href: '/orders', icon: ShoppingCart },
+  { name: 'Users & Staff', href: '/users', icon: Users },
+  { name: 'Expenses', href: '/expenses', icon: CreditCard },
+  { name: 'Reports', href: '/reports', icon: BarChart2 },
 ];
 
 export default function DashboardLayout() {
