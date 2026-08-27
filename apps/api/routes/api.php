@@ -27,5 +27,9 @@ Route::prefix('v1')->group(function () {
         
         // Products Route
         Route::apiResource('products', \App\Http\Controllers\Api\ProductController::class);
+        
+        // Stock Routes
+        Route::post('/stock/in', [\App\Http\Controllers\Api\StockController::class, 'stockIn']);
+        Route::post('/stock/out', [\App\Http\Controllers\Api\StockController::class, 'stockOut']);
     });
 });

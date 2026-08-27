@@ -10,7 +10,10 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return response()->json(Product::orderBy('created_at', 'desc')->get());
+        $products = Product::with(['batches' => function ($query) {
+            $query->where('status', 'active')->orderBy('expiration_date', 'asc');
+        }])->orderBy('created_at', 'desc')->get();
+        return response()->json($products);
     }
 
     public function store(Request $request)

@@ -25,7 +25,6 @@ const mainNavigation = [
   { name: 'Pharmacy Details', href: '/pharmacy', icon: Store },
   { name: 'Branches', href: '/branches', icon: MapPin },
   { name: 'Products & Stock', href: '/products', icon: Package },
-  { name: 'Orders & Sales', href: '/orders', icon: ShoppingCart },
   { name: 'Users & Staff', href: '/users', icon: Users },
   { name: 'Expenses', href: '/expenses', icon: CreditCard },
   { name: 'Reports', href: '/reports', icon: BarChart2 },

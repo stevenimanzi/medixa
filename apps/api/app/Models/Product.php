@@ -9,4 +9,14 @@ class Product extends Model {
     protected static function booted() {
         static::addGlobalScope(new CompanyScope);
     }
+
+    public function batches()
+    {
+        return $this->hasMany(ProductBatch::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(StockTransaction::class);
+    }
 }
