@@ -34,5 +34,8 @@ Route::prefix('v1')->group(function () {
         
         // Users Route
         Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+        
+        // Expenses Route
+        Route::apiResource('expenses', \App\Http\Controllers\Api\ExpenseController::class);
     });
 });
