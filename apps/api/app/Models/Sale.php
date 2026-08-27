@@ -1,0 +1,14 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\CompanyScope;
+class Sale extends Model {
+    use HasFactory;
+    protected $guarded = [];
+    protected static function booted() {
+        static::addGlobalScope(new CompanyScope);
+    }
+    public function customer() { return $this->belongsTo(Customer::class); }
+    public function user() { return $this->belongsTo(User::class); }
+}
