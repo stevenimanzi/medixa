@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    protected $fillable = ['name', 'is_active'];
+    protected $fillable = [
+        'name',
+        'is_active',
+        'tin',
+        'location',
+        'phone',
+        'email',
+    ];
 
     public function branches()
     {
