@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: medixa_user
+      POSTGRES_PASSWORD: medixa_password
+      POSTGRES_DB: medixa
+    ports:
+      - "5432:5432"
+    volumes:
+      - medixa-postgres-data:/var/lib/postgresql/data
+    networks:
+      - medixa-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - medixa-redis-data:/data
+    networks:
+      - medixa-network
+
+networks:
+  medixa-network:
+    driver: bridge
+
+volumes:
+  medixa-postgres-data:
+  medixa-redis-data:
