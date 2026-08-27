@@ -2,17 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './features/auth/LoginPage';
 import ProtectedRoute from './components/layout/ProtectedRoute';
-
-function Dashboard() {
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded shadow text-center">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <p className="mt-2 text-gray-600">Welcome to Medixa. You are logged in.</p>
-      </div>
-    </div>
-  );
-}
+import DashboardLayout from './components/layout/DashboardLayout';
+import DashboardPage from './features/dashboard/DashboardPage';
 
 function App() {
   return (
@@ -21,8 +12,11 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            {/* Future routes will go here: /products, /orders, etc. */}
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
