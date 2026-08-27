@@ -47,6 +47,15 @@ export default function POSPage() {
     }
   });
 
+  // Fetch Pharmacy Details
+  const { data: pharmacy } = useQuery({
+    queryKey: ['pharmacy'],
+    queryFn: async () => {
+      const res = await api.get('/pharmacy');
+      return res.data;
+    }
+  });
+
   // Checkout Mutation
   const checkoutMutation = useMutation({
     mutationFn: async (payload: any) => {
@@ -342,10 +351,11 @@ export default function POSPage() {
               {/* Invoice Printable Area */}
               <div ref={invoiceRef} className="bg-white p-10 shadow-sm border border-slate-200 rounded-xl">
                 <div className="text-center mb-8 header">
-                  <h1 className="text-2xl font-bold text-slate-900 tracking-tight">MEDIXA PHARMACY</h1>
-                  <p className="text-sm text-slate-500 mt-1">TIN: 102938475</p>
-                  <p className="text-sm text-slate-500">Location: Kigali, Rwanda</p>
-                  <p className="text-sm text-slate-500">Tel: +250 788 123 456</p>
+                  <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{pharmacy?.name?.toUpperCase() || 'MEDIXA PHARMACY'}</h1>
+                  <p className="text-sm text-slate-500 mt-1">TIN: {pharmacy?.tin || 'N/A'}</p>
+                  <p className="text-sm text-slate-500">Location: {pharmacy?.location || 'N/A'}</p>
+                  <p className="text-sm text-slate-500">Tel: {pharmacy?.phone || 'N/A'}</p>
+                  {pharmacy?.email && <p className="text-sm text-slate-500">Email: {pharmacy.email}</p>}
                 </div>
 
                 <div className="flex justify-between items-end mb-6 pb-6 border-b border-slate-100">
