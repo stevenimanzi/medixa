@@ -40,5 +40,9 @@ Route::prefix('v1')->group(function () {
         
         // Reports Route
         Route::get('/reports/dashboard', [\App\Http\Controllers\Api\ReportController::class, 'dashboard']);
+        
+        // Profile Settings Route
+        Route::get('/profile', [\App\Http\Controllers\Api\ProfileController::class, 'show']);
+        Route::put('/profile', [\App\Http\Controllers\Api\ProfileController::class, 'update']);
     });
 });
