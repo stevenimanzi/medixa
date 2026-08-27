@@ -24,5 +24,8 @@ Route::prefix('v1')->group(function () {
 
         // Branches Route
         Route::apiResource('branches', \App\Http\Controllers\Api\BranchController::class);
+        
+        // Products Route
+        Route::apiResource('products', \App\Http\Controllers\Api\ProductController::class);
     });
 });
