@@ -5,6 +5,7 @@ import LoginPage from './features/auth/LoginPage';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import DashboardLayout from './components/layout/DashboardLayout';
 import DashboardPage from './features/dashboard/DashboardPage';
+import POSPage from './features/pos/POSPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/pos" element={<POSPage />} />
               {/* Future routes will go here: /products, /orders, etc. */}
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Route>
