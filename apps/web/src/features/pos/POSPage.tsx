@@ -108,7 +108,7 @@ export default function POSPage() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-full overflow-hidden bg-slate-50/50 -m-8">
+    <div className="absolute inset-0 flex flex-col lg:flex-row overflow-hidden bg-slate-50/50">
       {/* Left Column: Products */}
       <div className="flex-1 flex flex-col h-full border-r border-slate-200">
         <div className="p-6 border-b border-slate-200 bg-white">
@@ -159,7 +159,7 @@ export default function POSPage() {
           <h2 className="text-xl font-bold text-slate-900">Current Order</h2>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
           {cart.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
               <ShoppingCart size={48} className="opacity-20" />
@@ -167,24 +167,33 @@ export default function POSPage() {
             </div>
           ) : (
             cart.map(item => (
-              <div key={item.id} className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
-                <div className="flex-1 min-w-0 pr-4">
-                  <h4 className="font-semibold text-slate-900 truncate text-sm">{item.name}</h4>
-                  <div className="text-blue-600 font-medium text-sm mt-1">RWF {(parseFloat(item.price) * item.cartQuantity).toLocaleString()}</div>
+              <div key={item.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3 group relative overflow-hidden">
+                <div className="flex justify-between items-start pr-8">
+                  <div>
+                    <h4 className="font-bold text-slate-900 leading-tight">{item.name}</h4>
+                    <div className="text-slate-500 text-xs mt-1">RWF {parseFloat(item.price).toLocaleString()} each</div>
+                  </div>
+                  <div className="text-blue-600 font-bold">RWF {(parseFloat(item.price) * item.cartQuantity).toLocaleString()}</div>
                 </div>
                 
-                <div className="flex items-center gap-3 bg-slate-50 rounded-lg p-1 border border-slate-100">
-                  <button onClick={() => updateQuantity(item.id, -1)} className="w-8 h-8 flex items-center justify-center rounded-md bg-white shadow-sm text-slate-500 hover:text-slate-900 disabled:opacity-50" disabled={item.cartQuantity <= 1}>
-                    <Minus size={14} />
-                  </button>
-                  <span className="font-semibold text-sm w-4 text-center">{item.cartQuantity}</span>
-                  <button onClick={() => updateQuantity(item.id, 1)} className="w-8 h-8 flex items-center justify-center rounded-md bg-white shadow-sm text-slate-500 hover:text-slate-900 disabled:opacity-50" disabled={item.cartQuantity >= item.stock_quantity}>
-                    <Plus size={14} />
-                  </button>
+                <div className="flex items-center justify-between border-t border-slate-50 pt-3 mt-1">
+                  <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+                    <button onClick={() => updateQuantity(item.id, -1)} className="w-7 h-7 flex items-center justify-center rounded bg-white shadow-sm text-slate-600 hover:text-blue-600 disabled:opacity-50 transition-colors" disabled={item.cartQuantity <= 1}>
+                      <Minus size={14} />
+                    </button>
+                    <span className="font-bold text-sm w-8 text-center text-slate-700">{item.cartQuantity}</span>
+                    <button onClick={() => updateQuantity(item.id, 1)} className="w-7 h-7 flex items-center justify-center rounded bg-white shadow-sm text-slate-600 hover:text-blue-600 disabled:opacity-50 transition-colors" disabled={item.cartQuantity >= item.stock_quantity}>
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                  <div className="text-xs text-slate-400">{item.stock_quantity} left</div>
                 </div>
                 
-                <button onClick={() => removeFromCart(item.id)} className="ml-3 text-slate-300 hover:text-red-500 transition-colors p-2">
-                  <Trash2 size={18} />
+                <button 
+                  onClick={() => removeFromCart(item.id)} 
+                  className="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition-colors bg-white rounded-full p-1"
+                >
+                  <Trash2 size={16} />
                 </button>
               </div>
             ))
