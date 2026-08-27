@@ -21,5 +21,8 @@ Route::prefix('v1')->group(function () {
         // Pharmacy Routes
         Route::get('/pharmacy', [\App\Http\Controllers\Api\PharmacyController::class, 'show']);
         Route::put('/pharmacy', [\App\Http\Controllers\Api\PharmacyController::class, 'update']);
+
+        // Branches Route
+        Route::apiResource('branches', \App\Http\Controllers\Api\BranchController::class);
     });
 });
