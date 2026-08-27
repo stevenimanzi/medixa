@@ -37,5 +37,8 @@ Route::prefix('v1')->group(function () {
         
         // Expenses Route
         Route::apiResource('expenses', \App\Http\Controllers\Api\ExpenseController::class);
+        
+        // Reports Route
+        Route::get('/reports/dashboard', [\App\Http\Controllers\Api\ReportController::class, 'dashboard']);
     });
 });
