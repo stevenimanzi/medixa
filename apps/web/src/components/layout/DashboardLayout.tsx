@@ -72,8 +72,12 @@ export default function DashboardLayout() {
                     }`
                   }
                 >
-                  <item.icon size={18} className={({ isActive }: any) => isActive ? 'text-blue-600' : 'text-slate-400'} />
-                  {item.name}
+                  {({ isActive }) => (
+                    <>
+                      <item.icon size={18} className={isActive ? 'text-blue-600' : 'text-slate-400'} />
+                      {item.name}
+                    </>
+                  )}
                 </NavLink>
               ))}
             </div>
