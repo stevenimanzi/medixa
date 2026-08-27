@@ -9,6 +9,7 @@ import POSPage from './features/pos/POSPage';
 import PharmacyPage from './features/pharmacy/PharmacyPage';
 import BranchesPage from './features/branches/BranchesPage';
 import ProductsPage from './features/products/ProductsPage';
+import UsersPage from './features/users/UsersPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,7 @@ function App() {
               <Route path="/pharmacy" element={<PharmacyPage />} />
               <Route path="/branches" element={<BranchesPage />} />
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/users" element={<UsersPage />} />
               {/* Future routes will go here: /orders, etc. */}
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Route>

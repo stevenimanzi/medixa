@@ -31,5 +31,8 @@ Route::prefix('v1')->group(function () {
         // Stock Routes
         Route::post('/stock/in', [\App\Http\Controllers\Api\StockController::class, 'stockIn']);
         Route::post('/stock/out', [\App\Http\Controllers\Api\StockController::class, 'stockOut']);
+        
+        // Users Route
+        Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
     });
 });
