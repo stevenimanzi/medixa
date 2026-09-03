@@ -29,7 +29,19 @@ export default function LoginPage() {
     try {
       const response = await api.post('/auth/login', data);
       setAuth(response.data.token, response.data.user);
-      navigate('/dashboard');
+
+      // Route brand new accounts through onboarding first.
+      try {
+        const [pharmacyRes, branchesRes] = await Promise.all([
+          api.get('/pharmacy'),
+          api.get('/branches'),
+        ]);
+        const hasPharmacy = !!pharmacyRes.data?.name;
+        const hasBranch = Array.isArray(branchesRes.data) && branchesRes.data.length > 0;
+        navigate(hasPharmacy && hasBranch ? '/dashboard' : '/onboarding');
+      } catch {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     }

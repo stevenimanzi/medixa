@@ -76,16 +76,9 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Settings className="text-blue-600" /> Account Settings
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">Manage your personal profile and security preferences.</p>
-        </div>
-      </div>
+    <div className="space-y-6">
+
+      <h1 className="text-2xl font-bold text-slate-900">Account Settings</h1>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-8 border-b border-slate-100 bg-slate-50 flex items-center gap-6">

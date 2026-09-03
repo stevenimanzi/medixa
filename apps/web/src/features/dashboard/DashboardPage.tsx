@@ -32,23 +32,15 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Dashboard Overview</h1>
-          <p className="text-sm text-slate-500 mt-1">Manage inventory, pricing and availability across your store</p>
-        </div>
-      </div>
+    <div className="space-y-6 pb-8">
+      <h1 className="text-2xl font-bold text-slate-900">Dashboard Overview</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {data.stats.map((stat: any, idx: number) => (
-          <div key={idx} className="p-4 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col justify-between">
-            <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wide flex items-center justify-between">
-              {stat.label}
-              <span className="text-slate-400 text-lg leading-none">⋮</span>
-            </h3>
+          <div key={idx} className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col justify-between">
+            <p className="text-sm font-medium text-slate-500">{stat.label}</p>
             <div className="mt-2 flex items-end justify-between overflow-hidden">
-              <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight whitespace-nowrap truncate" title={stat.value}>
+              <span className="text-3xl font-bold text-slate-900 tracking-tight whitespace-nowrap truncate" title={stat.value}>
                 {stat.value}
               </span>
             </div>

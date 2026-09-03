@@ -13,6 +13,7 @@ import UsersPage from './features/users/UsersPage';
 import ExpensesPage from './features/expenses/ExpensesPage';
 import ReportsPage from './features/reports/ReportsPage';
 import SettingsPage from './features/settings/SettingsPage';
+import OnboardingPage from './features/onboarding/OnboardingPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           
           <Route element={<ProtectedRoute />}>
+            <Route path="/onboarding" element={<OnboardingPage />} />
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/pos" element={<POSPage />} />

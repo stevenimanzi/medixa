@@ -189,21 +189,25 @@ export default function POSPage() {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col lg:flex-row overflow-hidden bg-slate-50/50">
-      {/* Left Column: Products */}
-      <div className="flex-1 flex flex-col h-full border-r border-slate-200">
-        <div className="p-6 border-b border-slate-200 bg-white">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-            <input 
-              type="text" 
-              placeholder="Search products by name or SKU..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-slate-100 border-transparent rounded-xl focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
-            />
-          </div>
+    <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-50/50">
+      {/* Top bar: product search */}
+      <div className="px-4 py-3 border-b border-slate-200 bg-white shrink-0">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <input
+            type="text"
+            placeholder="Search products by name or SKU..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 bg-slate-100 border border-transparent rounded-xl focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
+          />
         </div>
+      </div>
+
+      {/* Row: products + checkout */}
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+      {/* Left Column: Products */}
+      <div className="flex-1 flex flex-col h-full min-w-0">
 
         <div className="flex-1 overflow-y-auto p-6">
           {loadingProducts ? (
@@ -231,16 +235,20 @@ export default function POSPage() {
         </div>
       </div>
 
-      {/* Right Column: Cart */}
-      <div className="w-full lg:w-[400px] flex flex-col bg-white h-full shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.05)] z-10 relative">
-        <div className="p-6 border-b border-slate-200 flex items-center gap-3 bg-white">
+      {/* Right Column: Checkout card — 25px padding on all sides, 25px border radius */}
+      <div className="w-full lg:w-[400px] shrink-0 p-4 lg:h-full">
+      <div
+        className="bg-white h-full flex flex-col border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.15)]"
+        style={{ padding: '25px', borderRadius: '25px' }}
+      >
+        <div className="pb-4 border-b border-slate-200 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
             <ShoppingCart size={20} />
           </div>
           <h2 className="text-xl font-bold text-slate-900">Current Order</h2>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
+        <div className="flex-1 min-h-0 overflow-y-auto py-4 space-y-3">
           {cart.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
               <ShoppingCart size={48} className="opacity-20" />
@@ -248,7 +256,7 @@ export default function POSPage() {
             </div>
           ) : (
             cart.map(item => (
-              <div key={item.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3 group relative overflow-hidden">
+              <div key={item.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-3 group relative overflow-hidden">
                 <div className="flex justify-between items-start pr-8">
                   <div>
                     <h4 className="font-bold text-slate-900 leading-tight">{item.name}</h4>
@@ -281,7 +289,7 @@ export default function POSPage() {
           )}
         </div>
 
-        <div className="border-t border-slate-200 bg-white p-6 space-y-5">
+        <div className="border-t border-slate-200 pt-4 space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div>
                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1"><User size={12}/> Customer</label>
@@ -333,6 +341,8 @@ export default function POSPage() {
             Record Sales
           </button>
         </div>
+      </div>
+      </div>
       </div>
 
       {/* Invoice Modal Overlay */}

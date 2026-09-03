@@ -117,8 +117,8 @@ export default function BranchesPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <ConfirmModal 
+    <div className="space-y-6">
+      <ConfirmModal
         isOpen={isConfirmModalOpen}
         title="Delete Branch"
         message="Are you sure you want to delete this branch? All data associated with it may be lost."
@@ -127,14 +127,9 @@ export default function BranchesPage() {
         onCancel={() => setIsConfirmModalOpen(false)}
         isDestructive={true}
       />
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <MapPin className="text-blue-600" /> Pharmacy Branches
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">Manage all your physical branch locations.</p>
-        </div>
-        <button 
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl font-bold text-slate-900">Pharmacy Branches</h1>
+        <button
           onClick={() => handleOpenModal()}
           className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-5 rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2"
         >

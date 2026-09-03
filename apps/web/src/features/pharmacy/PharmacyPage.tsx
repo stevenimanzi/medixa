@@ -69,12 +69,9 @@ export default function PharmacyPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto pb-12">
+    <div className="pb-12">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-          <Store className="text-blue-600" /> Pharmacy Details
-        </h1>
-        <p className="text-slate-500 mt-1">Manage your pharmacy profile. These details will appear on generated invoices and receipts.</p>
+        <h1 className="text-2xl font-bold text-slate-900">Pharmacy Details</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">

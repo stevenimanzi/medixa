@@ -140,9 +140,9 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      
-      <ConfirmModal 
+    <div className="space-y-6">
+
+      <ConfirmModal
         isOpen={isConfirmModalOpen}
         title="Remove Staff Member"
         message="Are you sure you want to remove this staff member? This action cannot be undone and they will lose access immediately."
@@ -152,14 +152,9 @@ export default function UsersPage() {
         isDestructive={true}
       />
       
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Users className="text-blue-600" /> Users & Staff
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">Manage your team, their access levels, and accounts.</p>
-        </div>
-        <button 
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl font-bold text-slate-900">Users &amp; Staff</h1>
+        <button
           onClick={() => handleOpenModal()}
           className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-5 rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2"
         >
@@ -167,58 +162,65 @@ export default function UsersPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {users?.map((user: User) => (
-          <div key={user.id} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col group relative">
-            
-            {user.id === currentUser?.id && (
-              <div className="absolute top-0 right-6 -translate-y-1/2 bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">
-                You
-              </div>
-            )}
-
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-lg overflow-hidden shrink-0">
-                 <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`} alt="Avatar" className="w-full h-full object-cover" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-bold text-slate-900 truncate">{user.name}</h3>
-                <div className="text-sm text-slate-500 truncate">{user.email}</div>
-              </div>
+          <div
+            key={user.id}
+            className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col overflow-hidden"
+          >
+            {/* Banner */}
+            <div className="h-16 bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-50 relative">
+              {user.id === currentUser?.id && (
+                <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-blue-700 text-[11px] font-bold px-2.5 py-1 rounded-full border border-blue-100 shadow-sm">
+                  You
+                </span>
+              )}
             </div>
 
-            <div className="mb-4">
-               {user.is_company_owner ? (
-                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-100 text-purple-700">
-                   <ShieldCheck size={14} /> Store Owner (Full Access)
-                 </span>
-               ) : (
-                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600">
-                   <ShieldAlert size={14} /> Staff Member
-                 </span>
-               )}
-            </div>
-            
-            <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-              <div className="text-xs text-slate-400">
-                Joined {new Date(user.created_at).toLocaleDateString()}
+            <div className="px-5 pb-5 -mt-8 flex-1 flex flex-col">
+              <div className="w-16 h-16 rounded-2xl bg-white p-1 shadow-sm ring-1 ring-slate-100">
+                <img
+                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`}
+                  alt={user.name}
+                  className="w-full h-full object-cover rounded-xl"
+                />
               </div>
-              
-              <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                <button 
-                  onClick={() => handleOpenModal(user)}
-                  className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  <Edit2 size={16} />
-                </button>
-                {user.id !== currentUser?.id && (
-                  <button 
-                    onClick={() => handleDelete(user.id)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+
+              <h3 className="mt-3 text-base font-bold text-slate-900 truncate">{user.name}</h3>
+              <div className="text-sm text-slate-500 truncate">{user.email}</div>
+
+              <div className="mt-3">
+                {user.is_company_owner ? (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-100">
+                    <ShieldCheck size={14} /> Store Owner
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                    <ShieldAlert size={14} /> Staff Member
+                  </span>
                 )}
+              </div>
+
+              <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                <span className="text-xs text-slate-400 whitespace-nowrap">
+                  Joined {new Date(user.created_at).toLocaleDateString()}
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleOpenModal(user)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                  >
+                    <Edit2 size={14} /> Edit
+                  </button>
+                  {user.id !== currentUser?.id && (
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-100 rounded-lg hover:bg-red-100 transition-colors"
+                    >
+                      <Trash2 size={14} /> Remove
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

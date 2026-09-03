@@ -127,17 +127,12 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      
+    <div className="space-y-6">
+
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Package className="text-blue-600" /> Advanced Stock Management
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">Manage inventory, record incoming stock, and log damages/expirations.</p>
-        </div>
-        <button 
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl font-bold text-slate-900">Advanced Stock Management</h1>
+        <button
           onClick={() => {
             setProductForm({ name: '', sku: '', price: '', stock_quantity: '0' });
             setIsModalOpen(true);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { CreditCard, Plus, Edit2, Trash2, X, Calendar, DollarSign, FileText } from 'lucide-react';
+import { CreditCard, Plus, Edit2, Trash2, X, Calendar } from 'lucide-react';
 import api from '../../lib/api';
 import ConfirmModal from '../../components/ui/ConfirmModal';
 
@@ -123,9 +123,9 @@ export default function ExpensesPage() {
   const totalExpenses = expenses?.reduce((sum: number, exp: Expense) => sum + parseFloat(exp.amount), 0) || 0;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      
-      <ConfirmModal 
+    <div className="space-y-6">
+
+      <ConfirmModal
         isOpen={isConfirmModalOpen}
         title="Delete Expense"
         message="Are you sure you want to delete this expense record? This action cannot be undone."
@@ -136,14 +136,9 @@ export default function ExpensesPage() {
       />
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <CreditCard className="text-blue-600" /> Expenses Tracker
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">Record and manage pharmacy operational expenses.</p>
-        </div>
-        <button 
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl font-bold text-slate-900">Expenses Tracker</h1>
+        <button
           onClick={() => handleOpenModal()}
           className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-5 rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2 shrink-0"
         >
@@ -153,23 +148,13 @@ export default function ExpensesPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-600">
-            <DollarSign size={24} />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Total Expenses Recorded</p>
-            <p className="text-2xl font-bold text-slate-900">RWF {totalExpenses.toLocaleString()}</p>
-          </div>
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <p className="text-sm font-medium text-slate-500">Total Expenses Recorded</p>
+          <p className="text-3xl font-bold text-slate-900 mt-2">RWF {totalExpenses.toLocaleString()}</p>
         </div>
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-            <FileText size={24} />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Number of Records</p>
-            <p className="text-2xl font-bold text-slate-900">{expenses?.length || 0}</p>
-          </div>
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+          <p className="text-sm font-medium text-slate-500">Number of Records</p>
+          <p className="text-3xl font-bold text-slate-900 mt-2">{expenses?.length || 0}</p>
         </div>
       </div>
 
