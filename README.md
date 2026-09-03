@@ -7,7 +7,7 @@ Multi-branch Pharmacy Management Platform.
 - **Backend**: Laravel API (`apps/api`)
 - **Web Frontend**: React + TypeScript + Vite (`apps/web`)
 - **Desktop**: Electron Shell (`apps/desktop`)
-- **Database**: PostgreSQL
+- **Database**: SQLite
 - **Cache/Queue**: Redis
 
 ## Setup
